@@ -18,6 +18,20 @@ const typeDefs = gql`
   type Query {
     greetings: [String!]!
   }
+
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+    tasks: [Task!]
+  }
+
+  type Task {
+    id: ID!
+    name: String!
+    completed: Boolean!
+    user: User!
+  }
 `;
 
 const resolvers = {
