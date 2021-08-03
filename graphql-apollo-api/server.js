@@ -3,9 +3,6 @@ const { ApolloServer, gql } = require('apollo-server-express');
 const cors = require('cors');
 const dotEnv = require('dotenv');
 
-// const resolvers = require('./resolvers');
-// const typeDefs = require('./typeDefs');
-
 // set env variables
 dotEnv.config();
 
@@ -19,11 +16,15 @@ app.use(express.json());
 
 const typeDefs = gql`
   type Query {
-    greetings: String
+    greetings: [String!]!
   }
 `;
 
-const resolvers = {};
+const resolvers = {
+  Query: {
+    greetings: () => ["Hello", "hi"]
+  }
+};
 
 const apolloServer = new ApolloServer({
   typeDefs,
