@@ -48,6 +48,16 @@ module.exports = {
         console.log('error: ', error);
         throw error;
       }
+    }),
+    deleteTask: combineResolvers(isAuthenticated, isTaskOwner, async (_, { id }, { loggedInUserId }) => {
+      try {
+        const task = await Task.findByIdAndDelete(id);
+        await User.updateOne({ _id: loggedInUserId }, { $pull: { tasks: task.id } });
+        return task;
+      } catch (error) {
+        console.log('error: ', error);
+        throw error;
+      }
     })
   },
   Task: {
