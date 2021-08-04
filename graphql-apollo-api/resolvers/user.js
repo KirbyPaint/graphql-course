@@ -7,7 +7,8 @@ const User = require('../database/models/user');
 module.exports = {
   Query: {
     users: () => users,
-    user: (_, { id }) => {
+    user: (_, { id }, { email }) => {
+      console.log('email: ', email);
       return users.find(user => user.id === id)
     },
   },

@@ -23,7 +23,13 @@ app.use(express.json());
 
 const apolloServer = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: () => {
+    console.log('random===')
+    return {
+      email: "test@gmail.com" + Math.random()
+    }
+  }
 });
 
 apolloServer.start();
