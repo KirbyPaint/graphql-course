@@ -8,9 +8,9 @@ const { isAuthenticated, isTaskOwner } = require('./middleware');
 
 module.exports = {
   Query: {
-    tasks: combineResolvers(isAuthenticated, async (_, __, { loggedInUserId }) => {
+    tasks: combineResolvers(isAuthenticated, async (_, { skip = 0, limit = 10 }, { loggedInUserId }) => {
       try {
-        const tasks = await Task.find({ user: loggedInUserId });
+        const tasks = await Task.find({ user: loggedInUserId }).sort({ _id: -1 }).skip(skip).limit(limit);
         return tasks;
       } catch (error) {
         console.log('error: ', error);
