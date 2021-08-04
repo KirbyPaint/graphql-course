@@ -6,6 +6,7 @@ const dotEnv = require('dotenv');
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 const { connection } = require('./database/util');
+const { verifyUser } = require('./helper/context');
 
 // set env variables
 dotEnv.config();
@@ -24,10 +25,10 @@ app.use(express.json());
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: () => {
-    console.log('random===')
+  context: async ({ req }) => {
+    await verifyUser(req);
     return {
-      email: "test@gmail.com" + Math.random()
+      email: req.email
     }
   }
 });
