@@ -2,11 +2,13 @@ const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 const cors = require('cors');
 const dotEnv = require('dotenv');
+const Dataloader = require('dataloader');
 
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 const { connection } = require('./database/util');
 const { verifyUser } = require('./helper/context');
+const loaders = require('./loaders');
 
 // set env variables
 dotEnv.config();
@@ -29,7 +31,10 @@ const apolloServer = new ApolloServer({
     await verifyUser(req);
     return {
       email: req.email,
-      loggedInUserId: req.loggedInUserId
+      loggedInUserId: req.loggedInUserId,
+      loaders: {
+        user: new Dataloader(keys => loaders.user.batchUsers(keys))
+      }
     }
   }
 });
